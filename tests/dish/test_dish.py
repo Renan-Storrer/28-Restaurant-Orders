@@ -23,13 +23,17 @@ def test_dish():
 
     with pytest.raises(TypeError, match="Dish price must be float."):
         Dish("x-burguer", "25.0")
-    with pytest.raises(ValueError, match="Dish price must be greater than zero."):
+    with pytest.raises(
+        ValueError, match="Dish price must be greater then zero."
+    ):
         Dish("coxinha", 0)
 
-    assert dish1.recipe.get(Ingredient("queijo mussarela")) == 2
-    assert dish2.recipe.get(Ingredient("farinha")) == 1
+    dish1.recipe.get(Ingredient("queijo mussarela")) == 2
+    dish2.recipe.get(Ingredient("farinha")) == 1
 
-    assert dish1.get_restrictions() == {Restriction.LACTOSE, Restriction.ANIMAL_DERIVED}
+    assert dish1.get_restrictions() == {
+        Restriction.LACTOSE, Restriction.ANIMAL_DERIVED
+    }
     assert dish2.get_restrictions() == {Restriction.GLUTEN}
 
     assert dish1.get_ingredients() == {Ingredient("queijo mussarela")}

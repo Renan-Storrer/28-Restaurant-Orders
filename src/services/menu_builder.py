@@ -1,4 +1,4 @@
-from typing import Dict, List
+import pandas as pd
 
 from services.inventory_control import InventoryMapping
 from services.menu_data import MenuData
@@ -12,7 +12,7 @@ class MenuBuilder:
         self.menu_data = MenuData(data_path)
         self.inventory = InventoryMapping(inventory_path)
 
-    def make_order(self, dish_name: str) -> None:
+    def make_order(self, dish_name: str):
         try:
             curr_dish = [
                 dish
@@ -25,5 +25,16 @@ class MenuBuilder:
         self.inventory.consume_recipe(curr_dish.recipe)
 
     # Req 4
-    def get_main_menu(self, restriction=None) -> List[Dict]:
-        pass
+    def get_main_menu(self, restriction=None) -> pd.DataFrame:
+        menu = []
+
+        for dish in self.menu_data.dishes:
+            if restriction not in dish.get_restrictions():
+                menu.append({
+                    "dish_name": dish.name,
+                    "ingredients": dish.get_ingredients(),
+                    "price": dish.price,
+                    "restrictions": dish.get_restrictions(),
+                })
+
+        return pd.DataFrame(menu)
