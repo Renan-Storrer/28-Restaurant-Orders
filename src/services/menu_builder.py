@@ -1,5 +1,4 @@
-import pandas as pd
-
+from typing import Dict, List
 from services.inventory_control import InventoryMapping
 from services.menu_data import MenuData
 
@@ -12,7 +11,7 @@ class MenuBuilder:
         self.menu_data = MenuData(data_path)
         self.inventory = InventoryMapping(inventory_path)
 
-    def make_order(self, dish_name: str):
+    def make_order(self, dish_name: str) -> None:
         try:
             curr_dish = [
                 dish
@@ -21,20 +20,19 @@ class MenuBuilder:
             ][0]
         except IndexError:
             raise ValueError("Dish does not exist")
-
         self.inventory.consume_recipe(curr_dish.recipe)
 
-    # Req 4
-    def get_main_menu(self, restriction=None) -> pd.DataFrame:
-        menu = []
-
+    def get_main_menu(self, restriction=None) -> List[Dict]:
+        main_menu = []
         for dish in self.menu_data.dishes:
-            if restriction not in dish.get_restrictions():
-                menu.append({
+            if restriction in dish.get_restrictions():
+                continue
+            main_menu.append(
+                {
                     "dish_name": dish.name,
-                    "ingredients": dish.get_ingredients(),
                     "price": dish.price,
+                    "ingredients": dish.get_ingredients(),
                     "restrictions": dish.get_restrictions(),
-                })
-
-        return pd.DataFrame(menu)
+                }
+            )
+        return main_menu
