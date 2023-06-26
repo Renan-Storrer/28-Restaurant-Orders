@@ -1,4 +1,4 @@
-from src.models.ingredient import Ingredient, Restriction
+from src.models.ingredient import (Ingredient, Restriction)
 
 
 def test_ingredient():
@@ -17,5 +17,7 @@ def test_ingredient():
     assert ingredient1.name == "queijo mussarela"
     assert ingredient2.name == "farinha"
 
-    assert ingredient1.restrictions == {Restriction.LACTOSE, Restriction.ANIMAL_DERIVED}
+    assert ingredient1.restrictions == {
+        Restriction.LACTOSE, Restriction.ANIMAL_DERIVED
+        }
     assert ingredient2.restrictions == {Restriction.GLUTEN}
